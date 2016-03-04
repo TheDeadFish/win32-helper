@@ -20,6 +20,11 @@ LPARAM WINAPI lstView_getData(HWND hList, int item);
 #define lstView_insIntDat(a,b,c,d) lstView_iosInt(a,(b)|0x80000000,0,c,d)
 
 // listview helpers - source lines
+void WINAPI lstView_insColumn(HWND hList, int index, int width, const char* name) {
+	LVCOLUMNA LvCol; LvCol.mask=LVCF_TEXT|LVCF_WIDTH|LVCF_SUBITEM;
+	LvCol.cx=width;	LvCol.pszText=(char*)name;
+	SendMessage(hList,LVM_INSERTCOLUMNA,index,(LPARAM)&LvCol); }
+
 #define lstView_iosItem_(set, ins, type) \
 void WINAPI lstView_iosItem(HWND hList, int item, int subItem, type* lvi) { \
 	lvi->iSubItem = subItem; int msg = set;	if((subItem == 0)&&(((item < -1) \

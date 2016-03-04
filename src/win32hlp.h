@@ -12,6 +12,7 @@
 #include "rectpnt.cc"
 #include "updw-ctrl.cc"
 #include "stdwndclss.cc"
+#include "listView.cc"
 #include "msgloop.cc"
 
 #endif
