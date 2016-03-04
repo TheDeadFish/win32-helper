@@ -1,5 +1,7 @@
 #include <windows.h>
 #include <tchar.h>
+#include <stdio.h>
+#include <limits.h>
 #include "win32hlp.h"
 
 #include "children.cc"
