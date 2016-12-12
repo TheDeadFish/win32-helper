@@ -1,5 +1,6 @@
 // children - include lines
-RECT WINAPI GetChildRect(HWND hWnd);
+RECT WINAPI GetChildRect(HWND hWnd); RECT WINAPI GetChildRect(HWND hWnd, UINT ctrlId);
+XYWH WINAPI GetChildXywh(HWND hWnd); XYWH WINAPI GetChildXywh(HWND hWnd, UINT ctrlId);
 RECT WINAPI MurderChild(HWND hWnd, UINT ctrlId);
 HWND WINAPI PossessChild(HWND hwnd, UINT ctrlId,WNDPROC wndProc, void* This);
 HWND WINAPI PossessWindow(HWND hwnd, WNDPROC wndProc, void* This);
@@ -9,10 +10,15 @@ void WINAPI ShowDlgItems(HWND hwnd, const WORD* dlgItems, int itemCount, BOOL bS
 BOOL WINAPI IsButtonChecked(HWND hButton);
 
 // children - source lines
-RECT WINAPI GetChildRect(HWND hWnd) {
-	RECT rect; GetWindowRect(hWnd, &rect);
-    MapWindowPoints(HWND_DESKTOP, GetParent(hWnd), (LPPOINT) &rect, 2); 
-	return rect; }
+RECT WINAPI GetChildRect(HWND hWnd) { RECT rect;
+	GetWindowRect(hWnd, &rect);  MapWindowPoints(HWND_DESKTOP,
+	GetParent(hWnd), (LPPOINT) &rect, 2); return rect; }
+XYWH WINAPI GetChildXywh(HWND hWnd) { RECT rect = GetChildRect(hWnd); 
+	XYWH ret = {RECT_XYWH(rect)}; return ret; }
+RECT WINAPI GetChildRect(HWND hWnd, UINT ctrlId) {
+	return GetChildRect(GetDlgItem(hWnd, ctrlId)); }
+XYWH WINAPI GetChildXywh(HWND hWnd, UINT ctrlId) {
+	return GetChildXywh(GetDlgItem(hWnd, ctrlId)); }	
 RECT WINAPI MurderChild(HWND hWnd, UINT ctrlId) {
 	HWND hChild = GetDlgItem(hWnd, ctrlId);
 	RECT childRect = GetChildRect(hChild);
