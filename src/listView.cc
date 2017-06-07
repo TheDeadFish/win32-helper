@@ -73,7 +73,7 @@ void WINAPI listView_setCurSel(HWND hList, int item)
 		listView_setSel(hList, curItem, FALSE); }
 		
 	// select new item
-	item = min(item, ListView_GetItemCount(hList)-1); 
+	int tmp = ListView_GetItemCount(hList)-1; if(item > tmp) item = tmp;
 	if(item >= 0) { ListView_SetItemState(hList, item,
 		LVIS_FOCUSED | LVIS_SELECTED, LVIS_FOCUSED | LVIS_SELECTED); }
 }
