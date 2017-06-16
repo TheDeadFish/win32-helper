@@ -1,9 +1,10 @@
 #ifndef _WIN32_HLP_H_
 #define _WIN32_HLP_H_
-#include <commctrl.h>
+#include <stdshit.h>
 #include <windowsx.h>
 
 #include "msgmap.h"
+#include "sendmsg.cc"
 #include "rectpnt.cc"
 #include "children.cc"
 #include "combobox.cc"
@@ -14,5 +15,6 @@
 #include "stdwndclss.cc"
 #include "listView.cc"
 #include "msgloop.cc"
+#include "listBox.cc"
 
 #endif
