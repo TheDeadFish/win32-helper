@@ -33,5 +33,7 @@ cstr WINAPI dlgCombo_getText(HWND h, DWORD c, int i) {
 	return getDlgTextIdx(h, c, CB_GETLBTEXT, i); }
 int WINAPI dlgCombo_find(HWND h, DWORD c, cch* s) {
 	return sendDlgMsgU(h, c, CB_FINDSTRING, -1, s); }
+int WINAPI dlgCombo_findExact(HWND h, DWORD c, cch* s) {
+	return sendDlgMsgU(h, c, CB_FINDSTRINGEXACT, -1, s); }
 int WINAPI dlgCombo_selStr(HWND h, DWORD c, cch* s) {
 	return sendDlgMsgU(h, c, CB_SELECTSTRING, -1, s); }

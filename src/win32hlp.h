@@ -16,5 +16,6 @@
 #include "listView.cc"
 #include "msgloop.cc"
 #include "listBox.cc"
+#include "inputbox.cc"
 
 #endif

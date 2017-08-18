@@ -79,8 +79,8 @@ BOOL WINAPI dynOpenFileDlg_doModal(OPENFILENAMEA*
 	cstrW (__stdcall *fn2)(cch*) = utf816_dup; VARFIX(fn2);
 	ofn.lpstrInitialDir = fn2(pofn->lpstrInitialDir);
 	ofn.lpstrTitle = fn2(pofn->lpstrTitle);
-	ofn.lpstrDefExt = fn2(pofn->lpstrDefExt);
-	ofn.dwReserved += strlen(pofn->lpstrDefExt);
+	if(ofn.lpstrDefExt = fn2(pofn->lpstrDefExt))
+		ofn.dwReserved = strlen(ofn.lpstrDefExt);
 	{ cstrW tmp = {}; if(!(pofn->Flags & 0x200)) 
 	{ tmp = fn2(pofn->lpstrFile); } ofn.lpstrFile = tmp.data;
 	ofn.nMaxFile = tmp.slen+1; } dynOpenFileDlg_free(pofn);

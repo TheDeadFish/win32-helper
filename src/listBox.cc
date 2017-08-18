@@ -42,6 +42,8 @@ cstr WINAPI listBox_getText(HWND h, DWORD c, int i) {
 	return getDlgTextIdx(h, c, LB_GETTEXT, i); }
 int WINAPI listBox_find(HWND h, DWORD c, cch* s) {
 	return sendDlgMsgU(h, c, LB_FINDSTRING, -1, s); }
+int WINAPI listBox_findExact(HWND h, DWORD c, cch* s) {
+	return sendDlgMsgU(h, c, LB_FINDSTRINGEXACT, -1, s); }
 int WINAPI listBox_selStr(HWND h, DWORD c, cch* s) {
 	return sendDlgMsgU(h, c, LB_SELECTSTRING, -1, s); }
 
