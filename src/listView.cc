@@ -72,8 +72,9 @@ void WINAPI lstView_iosInt(HWND hList, int item, int subItem, int val) { WCHAR b
 	_itow(val, buff, 10); lstView_iosText(hList, item, subItem, buff); }
 void WINAPI lstView_iosInt(HWND hList, int item, int val, LPARAM data) { WCHAR buff[32];
 	_itow(val, buff, 10); lstView_iosText(hList, item, buff, data); }
-void WINAPI lstView_setData(HWND hList, int item, LPARAM data) { LVITEMW lvi; lvi.mask 
-	= LVIF_PARAM; lvi.lParam = data; sendMessageL(hList, LVM_SETITEMW, (LPARAM)&lvi); }
+void WINAPI lstView_setData(HWND hList, int item, LPARAM data) { LVITEMW lvi; 
+	lvi.mask = LVIF_PARAM; lvi.iItem = item; lvi.iSubItem = 0; lvi.lParam = data;
+	sendMessageL(hList, LVM_SETITEMW, (LPARAM)&lvi); }
 	
 // listView reading
 bool WINAPI lstView_getItem(HWND hList, int item, int subItem, LVITEMW* lvi) {

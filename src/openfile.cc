@@ -3,16 +3,29 @@ void __thiscall dynOpenFileDlg_free(OPENFILENAMEA* ofn);
 struct OpenFileName_ : OPENFILENAMEA { 
 	~OpenFileName_() { dynOpenFileDlg_free(this); }
 	cstr& cStr() { return *(cstr*)&lpstrFile; }
-	xarray<cch*>& lst() { return *(xarray<cch*>*)&lpstrFile; }};
+	xarray<xstr>& lst() { return *(xarray<xstr>*)&lpstrFile; }};
 struct OpenFileName : OpenFileName_ { OpenFileName(); BOOL doModal(HWND hParent); };
 struct SaveFileName : OpenFileName_ { SaveFileName(); BOOL doModal(HWND hParent); };
 
 // openfile - source lines
-xarray<cch*> __stdcall utf816_strLst_unpack(WCHAR* str) {
-	xarray<cch*> lst = {}; if(str) while(*str) { lst.push_back(
-	utf816_dup(str).data); str += strlen(str)+1; } return lst; }
-WCHAR* __stdcall utf816_strLst_dup(cch* str) { if(!str) return 0; cch* 
-	tmp = str; while(RW(tmp)) tmp++; return utf816_dup2(str, tmp-str+2); }
+xarray<cch*> __stdcall dynOpenFileDlg_unpack(OPENFILENAMEW* ofn)
+{
+	xarray<cch*> lst = {}; 
+	
+	size_t nFileOffset = ofn->nFileOffset;
+	if(!nFileOffset) return lst;
+	WCHAR* path = ofn->lpstrFile;
+	WCHAR* name = path+nFileOffset;	
+	name[-1] = 0;
+	
+	size_t pathLen = utf816_size(path);
+	while(*name) { GET_RETPAIR(
+		int nameSize, auto name2, utf816_size(name));
+		char* buff = xmalloc(nameSize+pathLen);
+		char* tmp = utf816_cpy(buff, path); *tmp = '\\'; 
+		utf816_cpy(tmp+1, name); lst.push_back(buff); 
+		name = (WCHAR*)name2; } return lst;
+}
 
 void dynOpenFileDlg_alloc(HWND hwnd, OPENFILENAMEW* ofn)
 {
@@ -89,10 +102,10 @@ BOOL WINAPI dynOpenFileDlg_doModal(OPENFILENAMEA*
 	free((void*)ofn.lpstrFilter); free((void*)ofn.lpstrInitialDir);
 	free((void*)ofn.lpstrTitle); free((void*)ofn.lpstrDefExt);
 	// convert lpstrFile to utf8
-	cstr (__stdcall *fn2)(const WCHAR*) = utf816_dup; 
-	if(pofn->Flags & 0x200) { nothing(); fn2 = Void(
-	utf816_strLst_unpack); } cstr tmp = fn2(ofn.lpstrFile);
-	pofn->lpstrFile = tmp; pofn->nMaxFile = tmp.slen; 
+	cstr tmp = (pofn->Flags & 0x200) ? 
+		CAST(cstr, dynOpenFileDlg_unpack(&ofn))
+		: utf816_dup(ofn.lpstrFile);
+	pofn->lpstrFile = tmp; pofn->nMaxFile = tmp.slen;
 	free((void*)ofn.lpstrFile)); return fn(&ofn);
 }
 

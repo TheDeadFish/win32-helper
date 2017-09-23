@@ -47,6 +47,6 @@ LRESULT WINAPI sendDlgMsgU(HWND h, DWORD c, UINT m, WPARAM w, cch* s) {
 	
 // special functions
 cstr WINAPI getWndTextIdx(HWND h, DWORD m, DWORD i) {
-	W32SARD_(sendMessage(h, m+1), sendMessage(h, m, i, (LPARAM)ws)) }
+	W32SARD_(sendMessage(h, m+1, i), sendMessage(h, m, i, (LPARAM)ws)) }
 cstr WINAPI getDlgTextIdx(HWND h, DWORD c, DWORD m, DWORD i) {
 	return getWndTextIdx(GetDlgItem(h, c), m, i); }

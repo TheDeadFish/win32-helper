@@ -18,4 +18,8 @@
 #include "listBox.cc"
 #include "inputbox.cc"
 
+// drop.cc: include lines
+xarray<xstr> WINAPI hDropGet(HANDLE hDrop);
+xarray<wxstr> WINAPI hDropGetW(HANDLE hDrop);
+
 #endif

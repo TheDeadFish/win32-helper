@@ -8,11 +8,11 @@
 	type* This = (type*)GetWindowLongPtr(hwnd, DWL_USER); \
 	if(This == NULL) return FALSE;	
 #define MEMBER_WNDPROC2(type, name) \
-	ALWAYS_INLINE LRESULT CALLBACK name(HWND hwnd, UINT uMsg, WPARAM w, LPARAM lParam); \
+	ALWAYS_INLINE LRESULT name(HWND hwnd, UINT uMsg, WPARAM w, LPARAM lParam); \
 	static LRESULT CALLBACK c##name(HWND hwnd, UINT uMsg, WPARAM w, LPARAM lParam) { \
 		GET_WND_CONTEXT(type); return This->name(hwnd, uMsg, w, lParam); }
 #define MEMBER_DLGPROC(type, name, func) \
-	__attribute__((always_inline)) INT_PTR CALLBACK name(HWND hwnd, UINT uMsg, WPARAM w, LPARAM lParam); \
+	ALWAYS_INLINE INT_PTR name(HWND hwnd, UINT uMsg, WPARAM w, LPARAM lParam); \
 	static INT_PTR CALLBACK c##name(HWND hwnd, UINT uMsg, WPARAM w, LPARAM lParam) { \
 		INIT_DLG_CONTEXT(type, func); return This->name(hwnd, uMsg, w, lParam); }
 #define MEMBER_DLGPROC2(t, n) MEMBER_DLGPROC(t,n, This->MACRO_CAT(n,Init)(hwnd))
@@ -44,6 +44,12 @@
 #define ON_COMMAND_RANGE(id, id2, f) ON_CONTROL_RANGE(0, id, id2, f)
 #define ON_RADIO_RNG(id, id2, f) ON_COMMAND_RANGE(id, id2, \
 	if(IsButtonChecked((HWND)lParam)) f; )
+
+// WM_CTLCOLOR
+#define ON_MESSAGE0(msg, f) case msg: { f; return 0; }
+#define ON_CTLCOLORSTATIC(f) ON_MESSAGE0(WM_CTLCOLORSTATIC,f)
+#define ON_CTLCOLOREDIT(f) ON_MESSAGE0(WM_CTLCOLOREDIT,f)
+#define ON_CTLCOLORBTN(f) ON_MESSAGE0(WM_CTLCOLORBTN,f)
 
 // listview handlers
 #define ON_LVN_NOTIFY(nc, id, f) ON_NOTIFY(nc, id, \
