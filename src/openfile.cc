@@ -1,30 +1,25 @@
-// openfile - include lines
-void __thiscall dynOpenFileDlg_free(OPENFILENAMEA* ofn);
-struct OpenFileName_ : OPENFILENAMEA { 
-	~OpenFileName_() { dynOpenFileDlg_free(this); }
-	cstr& cStr() { return *(cstr*)&lpstrFile; }
-	xarray<xstr>& lst() { return *(xarray<xstr>*)&lpstrFile; }};
-struct OpenFileName : OpenFileName_ { OpenFileName(); BOOL doModal(HWND hParent); };
-struct SaveFileName : OpenFileName_ { SaveFileName(); BOOL doModal(HWND hParent); };
+#include <stdshit.h>
+#include "win32hlp.h"
 
-// openfile - source lines
-xarray<cch*> __stdcall dynOpenFileDlg_unpack(OPENFILENAMEW* ofn)
+xarray<cch*> __stdcall dynOpenFileDlg_unpack(
+	WCHAR* path, size_t nFileOffset)
 {
+	SCOPE_EXIT(free(path));
 	xarray<cch*> lst = {}; 
 	
-	size_t nFileOffset = ofn->nFileOffset;
 	if(!nFileOffset) return lst;
-	WCHAR* path = ofn->lpstrFile;
-	WCHAR* name = path+nFileOffset;	
-	name[-1] = 0;
-	
+	WCHAR* name = path+nFileOffset;
+	if(name[-1] != '\0') name[-1] = 0;
+	ei(name[-2] == '\\') name[-2] = 0;
 	size_t pathLen = utf816_size(path);
-	while(*name) { GET_RETPAIR(
+	
+	do { GET_RETPAIR(
 		int nameSize, auto name2, utf816_size(name));
 		char* buff = xmalloc(nameSize+pathLen);
 		char* tmp = utf816_cpy(buff, path); *tmp = '\\'; 
 		utf816_cpy(tmp+1, name); lst.push_back(buff); 
-		name = (WCHAR*)name2; } return lst;
+		name = (WCHAR*)name2; }while(*name); 
+	return lst;
 }
 
 void dynOpenFileDlg_alloc(HWND hwnd, OPENFILENAMEW* ofn)
@@ -102,11 +97,9 @@ BOOL WINAPI dynOpenFileDlg_doModal(OPENFILENAMEA*
 	free((void*)ofn.lpstrFilter); free((void*)ofn.lpstrInitialDir);
 	free((void*)ofn.lpstrTitle); free((void*)ofn.lpstrDefExt);
 	// convert lpstrFile to utf8
-	cstr tmp = (pofn->Flags & 0x200) ? 
-		CAST(cstr, dynOpenFileDlg_unpack(&ofn))
-		: utf816_dup(ofn.lpstrFile);
-	pofn->lpstrFile = tmp; pofn->nMaxFile = tmp.slen;
-	free((void*)ofn.lpstrFile)); return fn(&ofn);
+	cstr tmp = !(pofn->Flags & 0x200) ? narrowFree(ofn.lpstrFile) :
+	CAST(cstr, dynOpenFileDlg_unpack(ofn.lpstrFile, ofn.nFileOffset));
+	pofn->lpstrFile = tmp; pofn->nMaxFile = tmp.slen;); return fn(&ofn);
 }
 
 OpenFileName::OpenFileName() { ZINIT; Flags =
