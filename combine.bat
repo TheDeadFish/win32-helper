@@ -6,4 +6,4 @@ gcc %CCFLAGS2% src\drop.cc -c -g -o obj\drop.o
 gcc %CCFLAGS2% src\openfile.cc -c -g -o obj\openfile.o -fpermissive
 gcc %CCFLAGS2% src\selfiles.cc -c -g -o obj\selfiles.o
 copy /Y bin\win32hlp.h %PROGRAMS%\local\include
-ar -rcs  %PROGRAMS%\local\lib32\libwin32hlp.a *.o
+ar -rcs  %PROGRAMS%\local\lib32\libwin32hlp.a obj\*.o
