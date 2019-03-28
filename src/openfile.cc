@@ -1,5 +1,5 @@
 #include <stdshit.h>
-#include "win32hlp.h"
+#include "../bin/win32hlp.h"
 
 xarray<cch*> __stdcall dynOpenFileDlg_unpack(
 	WCHAR* path, size_t nFileOffset)

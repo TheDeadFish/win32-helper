@@ -13,3 +13,10 @@
 #include "msgloop.cc"
 #include "listBox.cc"
 #include "inputbox.cc"
+
+// win32hlp - source lines
+void dlgButton_setCheck(HWND hwnd, int ctrlId, int state)
+{
+	CheckDlgButton(hwnd, ctrlId, 
+		state ? BST_CHECKED : BST_UNCHECKED);
+}

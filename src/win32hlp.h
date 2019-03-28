@@ -17,6 +17,9 @@
 #include "listBox.cc"
 #include "inputbox.cc"
 
+// win32hlp: include lines
+void WINAPI dlgButton_setCheck(HWND hwnd, int ctrlId, int state);
+
 // drop.cc: include lines
 xarray<xstr> WINAPI hDropGet(HANDLE hDrop);
 xarray<wxstr> WINAPI hDropGetW(HANDLE hDrop);
