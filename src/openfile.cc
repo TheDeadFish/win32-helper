@@ -97,9 +97,11 @@ BOOL WINAPI dynOpenFileDlg_doModal(OPENFILENAMEA*
 	free((void*)ofn.lpstrFilter); free((void*)ofn.lpstrInitialDir);
 	free((void*)ofn.lpstrTitle); free((void*)ofn.lpstrDefExt);
 	// convert lpstrFile to utf8
-	cstr tmp = !(pofn->Flags & 0x200) ? narrowFree(ofn.lpstrFile) :
-	CAST(cstr, dynOpenFileDlg_unpack(ofn.lpstrFile, ofn.nFileOffset));
-	pofn->lpstrFile = tmp; pofn->nMaxFile = tmp.slen;); return fn(&ofn);
+	if(!(pofn->Flags & 0x200)) { auto tmp = narrowFree(ofn.lpstrFile);
+		pofn->lpstrFile = tmp; pofn->nMaxFile = tmp.slen;
+	} else { auto tmp = dynOpenFileDlg_unpack(ofn.lpstrFile, ofn.nFileOffset);
+		pofn->lpstrFile = (char*)tmp.data; pofn->nMaxFile = tmp.len; });
+	return fn(&ofn);
 }
 
 OpenFileName::OpenFileName() { ZINIT; Flags =

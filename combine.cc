@@ -183,7 +183,7 @@ bool CParse::line(char* line)
 	return newLine;
 }
 
-bool include(FILE* fpOut, char* line, bool isSourceFile)
+void include(FILE* fpOut, char* line, bool isSourceFile)
 {
 	#define WRITE_LINE() { \
 		if(newLine == true) \
@@ -272,6 +272,10 @@ void processFile(const char* src, const char* dst,
 
 int main(int argc, char* argv[])
 {
+	// fix current directory
+	setCurrentDirectory(xstr(
+		pathCatF(getProgramDir(), "..")));
+
 	// get build options
 	for(int i = 1; i < argc; i++) {
 		for(int i = 0; i < sizeof(opValue); i++)
