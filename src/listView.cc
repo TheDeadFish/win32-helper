@@ -10,8 +10,8 @@ int WINAPI lstView_iosText(HWND hList, int item, const CT* text, LPARAM data, in
 int WINAPI lstView_iosText(HWND hList, int item, int iSub, const CT* text); 
 _LSTVW_F1_(char, LVITEMA); _LSTVW_F1_(WCHAR, LVITEMW);
 
-void WINAPI lstView_iosInt(HWND hList, int item, int subItem, int val);
-void WINAPI lstView_iosInt(HWND hList, int item, int subItem, int val, LPARAM data);
+int WINAPI lstView_iosInt(HWND hList, int item, int subItem, int val);
+int WINAPI lstView_iosInt(HWND hList, int item, int subItem, int val, LPARAM data);
 void WINAPI lstView_setData(HWND hList, int item, LPARAM data);
 bool WINAPI lstView_getItem(HWND hList, int item, int subItem, LVITEMW* lvi);
 LPARAM WINAPI lstView_getText(HWND hList, int item, int subItem, WCHAR* text, int max);
@@ -68,10 +68,10 @@ int WINAPI lstView_iosText(HWND hList, int item, const CT* text, LPARAM data, in
 	return lstView_iosText(hList, item, text, 0, &lvi, LVIF_TEXT|LVIF_PARAM|LVIF_IMAGE); }
 _LSTVW_I1_(char, LVITEMA); _LSTVW_I1_(WCHAR, LVITEMW); 
 	
-void WINAPI lstView_iosInt(HWND hList, int item, int subItem, int val) { WCHAR buff[32];
-	_itow(val, buff, 10); lstView_iosText(hList, item, subItem, buff); }
-void WINAPI lstView_iosInt(HWND hList, int item, int val, LPARAM data) { WCHAR buff[32];
-	_itow(val, buff, 10); lstView_iosText(hList, item, buff, data); }
+int WINAPI lstView_iosInt(HWND hList, int item, int subItem, int val) { WCHAR buff[32];
+	_itow(val, buff, 10); return lstView_iosText(hList, item, subItem, buff); }
+int WINAPI lstView_iosInt(HWND hList, int item, int val, LPARAM data) { WCHAR buff[32];
+	_itow(val, buff, 10); return lstView_iosText(hList, item, buff, data); }
 void WINAPI lstView_setData(HWND hList, int item, LPARAM data) { LVITEMW lvi; 
 	lvi.mask = LVIF_PARAM; lvi.iItem = item; lvi.iSubItem = 0; lvi.lParam = data;
 	sendMessageL(hList, LVM_SETITEMW, (LPARAM)&lvi); }
