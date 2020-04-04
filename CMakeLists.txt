@@ -20,4 +20,6 @@ add_custom_command(
 
 # build win32hlp library
 add_library(win32hlp STATIC bin/win32hlp.cc 
-	src/drop.cc src/openfile.cc src/selfiles.cc)
+	src/drop.cc src/openfile.cc src/selfiles.cc
+	src/drawItem.cc
+)

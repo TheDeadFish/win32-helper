@@ -16,6 +16,7 @@
 #include "msgloop.cc"
 #include "listBox.cc"
 #include "inputbox.cc"
+#include "drawItem.h"
 
 // win32hlp: include lines
 void WINAPI dlgButton_setCheck(HWND hwnd, int ctrlId, int state);
