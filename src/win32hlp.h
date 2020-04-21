@@ -1,7 +1,16 @@
 #ifndef _WIN32_HLP_H_
 #define _WIN32_HLP_H_
-#include <stdshit.h>
+#include <commctrl.h>
 #include <windowsx.h>
+
+#ifndef _STDSHIT_H_
+typedef const char cch;
+struct cstr { char* str; int slen; };
+typedef char* xstr;
+typedef WCHAR* wxstr;
+template <class T> struct xarray 
+	{ T* data; size_t len; };
+#endif
 
 #include "msgmap.h"
 #include "sendmsg.cc"
