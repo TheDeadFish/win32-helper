@@ -15,7 +15,7 @@
 	ALWAYS_INLINE INT_PTR name(HWND hwnd, UINT uMsg, WPARAM w, LPARAM lParam); \
 	static INT_PTR CALLBACK c##name(HWND hwnd, UINT uMsg, WPARAM w, LPARAM lParam) { \
 		INIT_DLG_CONTEXT(type, func); return This->name(hwnd, uMsg, w, lParam); }
-#define MEMBER_DLGPROC2(t, n) MEMBER_DLGPROC(t,n, This->MACRO_CAT(n,Init)(hwnd))
+#define MEMBER_DLGPROC2(t, n) MEMBER_DLGPROC(t,n, This->n##Init(hwnd))
 		
 // message handling macros
 #define DLGMSG_SWITCH(cse, def) { LONG_PTR msgResult = 0; HWND& sender = *(HWND*)&lParam; \
