@@ -1,0 +1,5 @@
+*.exe
+*.a
+bin/win32hlp.cc
+bin/win32hlp.h
+/build*
