@@ -22,4 +22,5 @@ add_custom_command(
 add_library(win32hlp STATIC bin/win32hlp.cc 
 	src/drop.cc src/openfile.cc src/selfiles.cc
 	src/drawItem.cc
+	src/txtEdtDlg.cc
 )

@@ -8,6 +8,7 @@ void WINAPI EnableDlgItem(HWND hwnd, UINT ctrlId, BOOL bEnable);
 void WINAPI EnableDlgItems(HWND hwnd, const WORD* dlgItems, int itemCount, BOOL bEnable);
 void WINAPI ShowDlgItems(HWND hwnd, const WORD* dlgItems, int itemCount, BOOL bShow);
 BOOL WINAPI IsButtonChecked(HWND hButton);
+void WINAPI DestroyNotify(HWND hwnd);
 
 // children - source lines
 RECT WINAPI GetChildRect(HWND hWnd) { RECT rect;
@@ -43,3 +44,7 @@ void WINAPI ShowDlgItems(HWND hwnd, const WORD* dlgItems,
 		hwnd, dlgItems[i]), bShow ? SW_SHOWNA : SW_HIDE); }
 BOOL WINAPI IsButtonChecked(HWND hButton) {
 	return SendMessage(hButton, BM_GETCHECK, 0, 0); }
+void WINAPI DestroyNotify(HWND hwnd) {
+	HWND hParent = GetWindow(hwnd, GW_OWNER);
+	SendMessage(hParent, WM_PARENTNOTIFY, 
+		WM_DESTROY, (LPARAM)hwnd); }
